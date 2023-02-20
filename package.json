@@ -1,0 +1,25 @@
+{
+  "name": "strapi-audit-logs",
+  "version": "0.0.1",
+  "description": "Plugin that adds basic audit log functionality to Strapi sites.",
+  "strapi": {
+    "name": "Strapi Audit Logs",
+    "description": "Plugin that adds basic audit log functionality to Strapi sites.",
+    "kind": "plugin",
+    "displayName": "Strapi Audit Logs"
+  },
+  "dependencies": {},
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "maintainers": [
+    {
+      "name": "A Strapi developer"
+    }
+  ],
+  "engines": {
+    "node": ">=14.19.1 <=18.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
