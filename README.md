@@ -35,9 +35,9 @@ module.exports = () => ({
 
 - Authentication on audit log endpoints
 - User access levels
-- ~~ Filtering ~~
-- ~~ Searching ~~ (scrapped this as a feature for now, may add at a later date.)
-- ~~ Pagination ~~
+- ~~Filtering~~
+- ~~Searching~~ (scrapped this as a feature for now, may add at a later date.)
+- ~~Pagination~~
 - Export of logs (all and a range / selection)
 - Auto export and cleaning of data at set intervals (to ensure db table doesn't get too biiiig)
 - Tidy up code and refine data fetch queries
