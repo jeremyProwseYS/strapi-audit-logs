@@ -1,6 +1,6 @@
-import React, {
-  useState
-} from 'react';
+import React from 'react';
+
+import { useIntl } from 'react-intl';
 
 import {
   ModalLayout,
@@ -15,15 +15,13 @@ import {
 
 const Popup = (props) => {
 
+  const { formatDate } = useIntl();
+
   const {
     popupVisible,
     setPopupVisible,
     auditContent
   } = props
-
-  console.log('auditContent', auditContent)
-
-  const [date, setDate] = useState();
 
   return !popupVisible ?
     null
@@ -43,7 +41,7 @@ const Popup = (props) => {
               label="Date"
               name="date"
               hint="Date the entry was changed."
-              value={auditContent.updatedAt}
+              value={formatDate(auditContent.updatedAt, { dateStyle: 'full' })}
               disabled
             />
           </Box>
@@ -62,6 +60,7 @@ const Popup = (props) => {
         <Box padding={2}>
           <JSONInput
             value={JSON.stringify(auditContent.request, null, "\t")}
+            disabled
             label="Raw request data"
             hint="Raw input for change request."
           />

@@ -10,6 +10,8 @@ import React, {
   useEffect
 } from 'react';
 
+import { useIntl } from 'react-intl';
+
 import Eye from '@strapi/icons/Eye';
 
 import {
@@ -17,8 +19,6 @@ import {
   ContentLayout,
   IconButton,
   EmptyStateLayout,
-  Layout,
-  BaseCheckbox,
   Table,
   Thead,
   Tbody,
@@ -26,20 +26,33 @@ import {
   Td,
   Th,
   Typography,
-  Box,
-  Flex
 } from "@strapi/design-system";
 
-import Popup from './popup';
+import { useQueryParams, useFetchClient } from '@strapi/helper-plugin';
 
 import logsRequest from '../../api/logs';
 
+import Popup from './components/popup';
+import AttributeFilter from './components/attributeFilters';
+import PaginationFooter from './components/paginationFooter';
+
 const HomePage = () => {
-  
+
+  const { get } = useFetchClient();
+  const {formatDate} = useIntl();
+
+  const uid = `plugin::strapi-audit-logs.audit-log`;
+  const componentFetchURL = `/content-manager/content-types/${uid}/configuration`;
+  const attributesFetchURL = `/content-manager/content-types`;
+  const [contentType, setContentType] = useState(false);
+
   const [logs, setLogs] = useState([]);
+  const [pagination, setPagination] = useState({});
   const [logCount, setLogCount] = useState(0);
   const [popupVisible, setPopupVisible] = useState(false);
   const [auditContent, setAuditContent] = useState(false);
+
+  const [{ query }] = useQueryParams();
 
   const handleAuditClick = (id) => {
     logsRequest.getLog(id).then(res => {
@@ -47,12 +60,59 @@ const HomePage = () => {
     });
   }
 
+  useEffect( async () => {
+    const [{ data: contentTypeList }, { data: contentType }] = await Promise.all(
+      [attributesFetchURL, componentFetchURL].map((endPoint) =>
+        get(endPoint)
+      )
+    );
+
+    const contentTypeAttributes = contentTypeList.data.find((item) => item.uid === uid).attributes
+    const contentTypeExploded = contentType?.data?.contentType;
+
+    const mainFieldName = contentTypeExploded.settings.mainField;
+    const mainFieldAttribute = contentTypeAttributes[mainFieldName];
+
+    const formattedContentType = {
+      ...contentTypeExploded,
+      attributes: contentTypeAttributes,
+      metadatas: {
+        ...contentTypeExploded.metadatas,
+        mainField: {
+          ...mainFieldAttribute,
+          name: mainFieldName,
+        },
+      },
+    }
+
+    setContentType(formattedContentType)
+
+  }, [])
+
   useEffect(() => {
-    logsRequest.getLogs().then(res => {
-      setLogCount(res.data.length);
-      setLogs(res.data);
+
+    const params = {
+      pagination: {}
+    };
+
+    if (query?.filters) {
+      params['filters'] = query.filters
+    }
+
+    if (query?.page) {
+      params['pagination']['page'] = query.page
+    }
+
+    if (query?.pageSize) {
+      params['pagination']['pageSize'] = query.pageSize
+    }
+
+    logsRequest.getLogs(params).then(res => {
+      setLogCount(res.data.results.length);
+      setLogs(res.data.results);
+      setPagination(res.data.pagination);
     });
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     if (auditContent) {
@@ -72,43 +132,49 @@ const HomePage = () => {
         { logCount === 0 ?
           <EmptyStateLayout content="You don't have any logs yet..." />
         :
-          <Table colCount={4} rowCount={logCount}>
-            <Thead>
-              <Tr>
-                <Th>
-                  <Typography variant="sigma">ID</Typography>
-                </Th>
-                <Th>
-                  <Typography variant="sigma">Action</Typography>
-                </Th>
-                <Th>
-                  <Typography variant="sigma">Date</Typography>
-                </Th>
-                <Th>
-                  <Typography variant="sigma">User</Typography>
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {logs.map(entry => <Tr key={entry.id}>
-                  <Td>
-                    <Typography textColor="neutral800">{entry.id}</Typography>
-                  </Td>
-                  <Td>
-                    <Typography textColor="neutral800">{entry.action}</Typography>
-                  </Td>
-                  <Td>
-                    <Typography textColor="neutral800">{entry.date}</Typography>
-                  </Td>
-                  <Td>
-                    <Typography textColor="neutral800">{entry.user}</Typography>
-                  </Td>
-                  <Td>
-                    <IconButton onClick={() => handleAuditClick(entry.id)} label="View" noBorder icon={<Eye />} />
-                  </Td>
-                </Tr>)}
-              </Tbody>
-          </Table>
+          <>
+            {contentType &&
+              <AttributeFilter contentType={contentType} metadatas={contentType.metadatas} slug={contentType.uid} />
+            }
+            <Table colCount={4} rowCount={logCount}>
+              <Thead>
+                <Tr>
+                  <Th>
+                    <Typography variant="sigma">ID</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Action</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">Date</Typography>
+                  </Th>
+                  <Th>
+                    <Typography variant="sigma">User</Typography>
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {logs.map(entry => <Tr key={entry.id}>
+                    <Td>
+                      <Typography textColor="neutral800">{entry.id}</Typography>
+                    </Td>
+                    <Td>
+                      <Typography textColor="neutral800">{entry.action}</Typography>
+                    </Td>
+                    <Td>
+                    <Typography textColor="neutral800">{formatDate(entry.date, { dateStyle: 'full' })}</Typography>
+                    </Td>
+                    <Td>
+                      <Typography textColor="neutral800">{entry.user}</Typography>
+                    </Td>
+                    <Td>
+                      <IconButton onClick={() => handleAuditClick(entry.id)} label="View" noBorder icon={<Eye />} />
+                    </Td>
+                  </Tr>)}
+                </Tbody>
+            </Table>
+            <PaginationFooter pagination={pagination} />
+          </>
         }
       </ContentLayout>
 

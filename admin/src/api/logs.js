@@ -1,13 +1,13 @@
 import axiosInstance from '../../src/utils/axiosInstance';
 
 const logsRequest = {
-  getLogs: async () => {
-    const data = await axiosInstance.get(`/strapi-audit-logs/list`);
-    return data;
+  getLogs: async (params) => {
+    const response = await axiosInstance.get(`/strapi-audit-logs/list`, {params});
+    return response;
   },
   getLog: async (id) => {
-    const data = await axiosInstance.get(`/strapi-audit-logs/fetch/${id}`);
-    return data;
+    const response = await axiosInstance.get(`/strapi-audit-logs/fetch/${id}`);
+    return response;
   },
 };
 

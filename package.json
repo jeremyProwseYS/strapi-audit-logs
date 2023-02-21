@@ -1,10 +1,10 @@
 {
   "name": "strapi-audit-logs",
-  "version": "0.0.1",
-  "description": "Plugin that adds basic audit log functionality to Strapi sites.",
+  "version": "0.0.0",
+  "description": "This is the description of the plugin.",
   "strapi": {
     "name": "Strapi Audit Logs",
-    "description": "Plugin that adds basic audit log functionality to Strapi sites.",
+    "description": "Description of Strapi Audit Logs plugin",
     "kind": "plugin",
     "displayName": "Strapi Audit Logs"
   },

@@ -16,8 +16,6 @@ const createAuditEntry = (event, action) => {
   const { model, result } = event;
   const contentType = capitalized(model.singularName)
 
-  console.log('EVENT', event)
-
   const user = result.updatedBy ? result.updatedBy.email : result.user ? result.user : "Developer"
 
   strapi.entityService.create('plugin::strapi-audit-logs.audit-log', {
