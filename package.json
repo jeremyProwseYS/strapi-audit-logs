@@ -1,16 +1,16 @@
 {
   "name": "strapi-audit-logs",
   "version": "0.0.1",
-  "description": "This is the description of the plugin.",
+  "description": "Plugin that adds basic support for Audit Logs in Strapi.",
   "strapi": {
     "name": "Strapi Audit Logs",
-    "description": "Description of Strapi Audit Logs plugin",
+    "description": "Plugin that adds basic support for Audit Logs in Strapi.",
     "kind": "plugin",
     "displayName": "Strapi Audit Logs"
   },
-  "author": "A Strapi developer",
+  "author": "https://github.com/jeremyProwseYS",
   "maintainers": [
-    "A Strapi developer"
+    "https://github.com/jeremyProwseYS"
   ],
   "engines": {
     "node": ">=14.19.1 <=18.x.x",
