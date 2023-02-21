@@ -1,6 +1,6 @@
 {
   "name": "strapi-audit-logs",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "This is the description of the plugin.",
   "strapi": {
     "name": "Strapi Audit Logs",
@@ -8,18 +8,31 @@
     "kind": "plugin",
     "displayName": "Strapi Audit Logs"
   },
-  "dependencies": {},
-  "author": {
-    "name": "A Strapi developer"
-  },
+  "author": "A Strapi developer",
   "maintainers": [
-    {
-      "name": "A Strapi developer"
-    }
+    "A Strapi developer"
   ],
   "engines": {
     "node": ">=14.19.1 <=18.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "main": "strapi-admin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremyProwseYS/strapi-audit-logs.git"
+  },
+  "keywords": [
+    "Strapi",
+    "Audit",
+    "Logs",
+    "Logging"
+  ],
+  "bugs": {
+    "url": "https://github.com/jeremyProwseYS/strapi-audit-logs/issues"
+  },
+  "homepage": "https://github.com/jeremyProwseYS/strapi-audit-logs#readme"
 }

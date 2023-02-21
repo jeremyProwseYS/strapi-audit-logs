@@ -4,18 +4,20 @@ Plugin that adds very basic audit functionality to strapi sites.
 
 Tested with Strapi version: 4.6.1
 
-## installation
+## Installation
 ```
-yarn strapi install strapi-audit-logs
+npm install strapi-audit-logs
+or
+yarn add strapi-audit-logs
 ```
 
-alternatively clone the plugin files and copy to:
+Alternatively download the plugin files and copy to:
 
 ```js
 // src/plugins
 ```
 
-## setup
+## Setup
 
 You have to enable the plugin in your plugins config file
 
@@ -25,7 +27,8 @@ module.exports = () => ({
   // ..
   'strapi-audit-logs': {
     enabled: true,
-    resolve: './src/plugins/strapi-audit-logs'
+    resolve: '/path/to/plugin/files'
+    // this will either be in `/node_modules/strapi-audit-logs` or `/src/plugins` depending on your install method.
   }
   // ..
 })
